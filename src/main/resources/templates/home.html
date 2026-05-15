@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en"
+xmlns:th="http://www.thymeleaf.org">
+<head th:insert="index :: head"></head>
+<body>
+
+    <head th:insert="index :: navbar"></head>
+        <!-- messaggio unauthorized -->
+        <div th:if="${param.notAuthorized}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Access Denied!</strong> You don't have permission to access this page.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row ms-5 vh-100 align-items-centered">
+                <div class="col-10">
+                    <h1 class="mb5">Welcome to<span class="display-4 fw-bold d-block">New Aulab Chronicle</span></h1>
+                </div>
+            </div>
+        </div>
+        
+    <head th:insert="~{index :: footer}"></head>
+    <script th:replace="~{index :: bootstrapScript}"></script>
+
+</body>
+</html>
