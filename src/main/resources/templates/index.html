@@ -25,24 +25,25 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" href="">Crea un articolo</a>
+              <li sec:authorize="isAuthenticated" class="nav-item">
+                <a class="nav-link" href="/articles/create">Crea un articolo</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="">Link</a>
               </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" id="navbarDropdown">
-                    Dropdown
+                    Accesso
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Register</a></li>
-                        <li><a class="dropdown-item" href="#">Login</a></li>
-                        <li><a class="dropdown-item" href="#">Logout</a></li>
+                        <li sec:authorize="isAnonymous"><a class="dropdown-item" aria-current="page" th:href="@{/register}">Register</a></li>
+                        <li sec:authorize="isAnonymous"><a class="dropdown-item" aria-current="page" th:href="@{/login}">Login</a></li>
+                        <li sec:authorize="isAuthenticated"><a class="dropdown-item" aria-current="page" th:href="@{/logout}">Logout</a></li>
                     </ul>
                 </li>
             </ul>
-            <div>Benvenuto, <span th:text="${username}">Utente</span>!</div>
+            <div sec:authorize="isAuthenticated" th:text="'Benvenuto, ' + ${#authentication.principal.fullname} + '-' + ${#authentication.principal.authorities[0].authority.replace('ROLE_', '')} + '!' ">
+            >Benvenuto</div>
         </div>
         <form class="d-flex">
             <input class="form-control me-2" type="search" placeholder="Search" name="keyword" aria-label="Search">

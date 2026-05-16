@@ -44,8 +44,17 @@ public class Article {
     private String body;
 
     @Column(nullable = false, length = 8)
-    @NotNull
+    @NotEmpty
     private LocalDate publicationDate;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties({"articles"})
+    private User user;
+
+    @ManyToOne
+    @JsonIgnoreProperties({"articles"})
+    private Category category;
 
 
 }

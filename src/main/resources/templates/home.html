@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
 xmlns:th="http://www.thymeleaf.org">
+
 <head th:insert="index :: head"></head>
 <body>
 
@@ -9,6 +10,10 @@ xmlns:th="http://www.thymeleaf.org">
         <div th:if="${param.notAuthorized}" class="alert alert-danger alert-dismissible fade show" role="alert">
             <strong>Access Denied!</strong> You don't have permission to access this page.
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div th:if="${successMessagge}" class="alert alert-success">
+            <p th:text="${successMessagge}"></p>
         </div>
 
         <div class="container-fluid">
