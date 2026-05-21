@@ -2,7 +2,9 @@ package it.aulab.progetto_finale_michele_macis.repositories;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import it.aulab.progetto_finale_michele_macis.models.Article;
 import it.aulab.progetto_finale_michele_macis.models.Category;

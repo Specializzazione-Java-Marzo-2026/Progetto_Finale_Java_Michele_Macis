@@ -1,5 +1,6 @@
 package it.aulab.progetto_finale_michele_macis.controllers;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -29,7 +30,6 @@ import it.aulab.progetto_finale_michele_macis.repositories.ArticleRepository;
 import it.aulab.progetto_finale_michele_macis.repositories.CareerRequestRepository;
 import it.aulab.progetto_finale_michele_macis.dtos.ArticleDto;
 import it.aulab.progetto_finale_michele_macis.dtos.UserDto;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -135,5 +135,13 @@ public class UserController {
             viewModel.addAttribute("articles", articleRepository.findByIsAcceptedIsNull());
             return "revisor/dashboard";
         }
-        
-}
+
+        // Rotta per la dashboard del redattore
+        @GetMapping("/writer/dashboard")
+        public String writerDashboard(Model viewModel, Principal principal) {
+            viewModel.addAttribute("title", "I tuoi articoli");
+
+            List<ArticleDto> userArticles = articleService.readAll().stream().filter(article -> article.getUser().equals(principal.getName())).toList();
+            return "writer/dashboard";
+        }
+    }

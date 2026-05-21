@@ -117,4 +117,12 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
         article.setIsAccepted(result);
         articleRepository.save(article);
     }
+
+    public List<ArticleDto> search(String searchTerm){
+        List<ArticleDto> dtos = new ArrayList<ArticleDto>();
+        for(Article article: articleRepository.search(searchTerm)){
+            dtos.add(modelMapper.map(article, ArticleDto.class));
+        }
+        return dtos;
+    }
 }

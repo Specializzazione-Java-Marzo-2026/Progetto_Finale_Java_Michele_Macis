@@ -9,6 +9,7 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,6 +30,8 @@ import it.aulab.progetto_finale_michele_macis.repositories.ArticleRepository;
 import it.aulab.progetto_finale_michele_macis.services.ArticleService;
 import it.aulab.progetto_finale_michele_macis.services.CrudService;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @Controller
@@ -103,6 +106,32 @@ public class ArticleController {
         return "article/detail";
     }
 
+    // rotta di modifica di un articolo
+    @GetMapping("/edit/{id}")
+    public String editArticle(@PathVariable("id") Long id, Model viewModel) {
+        viewModel.addAttribute("title", "Article update");
+        viewModel.addAttribute("article", articleService.read(id));
+        viewModel.addAttribute("categories", categoryService.readAll());
+        return "article/edit";
+    }
+
+    // Rotta storing di una modifica di un articolo
+    @PostMapping("/update/{id}")
+    public String articleUpdate(@PathVariable("id")Long id, @Valid @ModelAttribute("article") Article article, BindingResult result, RedirectAttributes redirectAttributes, Principal principal, MultipartFile file, Model viewModel) {
+        // controllo errori con validazioni
+        if(result.hasErrors()){
+            viewModel.addAttribute("title","Article update");
+            article.setImage(articleService.read(id).getImage());
+            viewModel.addAttribute("categories", categoryService.readAll());
+            return "article/edit";
+        }
+        articleService.update(id,article,file);
+        redirectAttributes.addFlashAttribute("successMessage","Articolo modificato con successo!")
+        return "redirect:/articles";
+    }
+    
+    
+
     // Rotta dettaglio di un articolo per il revisore
     @GetMapping("revisor/detail/{id}")
     public String revisorDetailArticle(@PathVariable("id") Long id, Model viewModel){
@@ -124,6 +153,23 @@ public class ArticleController {
             redirectAttributes.addFlashAttribute("resultMessage", "Azione non valida!");
         }
         return "redirect:/revisor/dashboard";
+    }
+
+    // Rotta per la ricerca degli articoli
+    @GetMapping("/search")
+    public String search(@RequestParam("searchTerm") String searchTerm, Model viewModel){
+        viewModel.addAttribute("title", "Risultati ricerca");
+
+        List<ArticleDto> articles = articleService.search(searchTerm);
+
+        List<ArticleDto> acceptedArticles = articles.stream()
+            .filter(article -> article.getIsAccepted() != null && article.getIsAccepted())
+            .sorted(Comparator.comparing(ArticleDto::getPublishDate).reversed())
+            .toList();
+
+        viewModel.addAttribute("articles", acceptedArticles);
+
+        return "article/searchResults";
     }
 }
 
