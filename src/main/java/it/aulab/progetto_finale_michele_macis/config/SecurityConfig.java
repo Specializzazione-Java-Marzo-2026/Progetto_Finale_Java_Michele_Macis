@@ -20,7 +20,7 @@ import it.aulab.progetto_finale_michele_macis.services.CustomUserDetailsService;
 public class SecurityConfig {
 
     @Autowired
-    private CustomUserDetailsService userDetailsService;
+    private CustomUserDetailsService customUserDetailsService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -30,7 +30,8 @@ public class SecurityConfig {
         https.csrf(crsft -> crsft.disable())
             .authorizeHttpRequests((authorize) ->
             authorize.requestMatchers("/register/**").permitAll()
-            .requestMatchers("/login/").permitAll()
+            .requestMatchers("/admin/dashboard", "/categories/create", "/categories/edit/{id}", "/categories/update/{id}").hasRole("ADMIN")
+            .requestMatchers("/register", "/", "/articles", "/images/**", "/articles/detail/**", "/categories/search/{id}", "/search/{id}").permitAll()
             .anyRequest().authenticated()
         ).formLogin(form ->
             form.loginPage("/login")

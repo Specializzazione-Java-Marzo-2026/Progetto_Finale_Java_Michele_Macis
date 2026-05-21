@@ -19,7 +19,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import it.aulab.progetto_finale_michele_macis.repositories.RoleRepository;
 import jakarta.servlet.http.HttpSession;
 
-import java.security.Security;
 import java.util.List;
 
 @Service
@@ -74,5 +73,10 @@ public class UserServiceImpl implements UserService {
         } catch(AuthenticationException e){
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public User find(Long id){
+        return userRepository.findById(id).get();
     }
 }

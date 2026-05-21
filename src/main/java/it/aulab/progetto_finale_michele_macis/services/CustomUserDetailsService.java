@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 import it.aulab.progetto_finale_michele_macis.models.User;
 import it.aulab.progetto_finale_michele_macis.repositories.UserRepository;
 
-import java.util.Collection;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
-import javax.management.relation.Role;
+import it.aulab.progetto_finale_michele_macis.models.Role;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -34,7 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
-                mapRolesToAuthorithies(user.getRoles())
+                mapRolesToAuthorities(user.getRoles())
         );
     }
 
