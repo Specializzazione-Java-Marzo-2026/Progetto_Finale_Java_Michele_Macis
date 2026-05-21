@@ -75,7 +75,8 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
                 e.printStackTrace();
             }
         }
-
+        article.setIsAccepted(null);
+    
         ArticleDto dto = modelMapper.map(articleRepository.save(article),ArticleDto.class);
         if(!file.isEmpty()){
             imageService.saveImageOnDB(url, article);
@@ -109,5 +110,11 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
             dtos.add(modelMapper.map(article, ArticleDto.class));
         }
         return dtos;
+    }
+
+    public void setIsAccepted(Boolean result, Long id){
+        Article article = articleRepository.findById(id).get();
+        article.setIsAccepted(result);
+        articleRepository.save(article);
     }
 }
