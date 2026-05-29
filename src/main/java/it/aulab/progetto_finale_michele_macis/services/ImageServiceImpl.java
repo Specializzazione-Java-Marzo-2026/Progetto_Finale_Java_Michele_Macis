@@ -41,7 +41,7 @@ public class ImageServiceImpl implements ImageService{
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public void saveImageOnDB(String ulr, Article article){
+    public void saveImageOnDB(String url, Article article){
         url = url.replace(supabaseBucket, supabaseImage);
         imageRepository.save(Image.builder().path(url).article(article).build());
     }
@@ -64,7 +64,7 @@ public class ImageServiceImpl implements ImageService{
                 headers.set("Content-Type","image/"+exstension);
                 headers.set("Authorization","Bearer"+supabaseKey);
 
-                HttpEntity<byte[]> requestEntity = new Httpentity<>(file.getBytes(), headers);
+                HttpEntity<byte[]> requestEntity = new HttpEntity<>(file.getBytes(), headers);
 
                 restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
 

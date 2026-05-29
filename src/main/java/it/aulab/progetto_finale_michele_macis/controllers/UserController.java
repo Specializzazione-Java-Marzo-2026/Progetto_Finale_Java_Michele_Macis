@@ -114,7 +114,7 @@ public class UserController {
 
             List<ArticleDto> articles = articleService.searchByAuthor(user);
             List<ArticleDto> acceptedArticles= articles.stream().filter(article-> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
-            viewModel.addAttribute("articles", articles);
+            viewModel.addAttribute("articles", acceptedArticles);
 
             return "article/articles";
         }
@@ -142,6 +142,7 @@ public class UserController {
             viewModel.addAttribute("title", "I tuoi articoli");
 
             List<ArticleDto> userArticles = articleService.readAll().stream().filter(article -> article.getUser().equals(principal.getName())).toList();
+            viewModel.addAttribute("articles", userArticles);
             return "writer/dashboard";
         }
     }

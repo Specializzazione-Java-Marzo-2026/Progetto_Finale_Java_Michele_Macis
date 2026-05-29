@@ -25,7 +25,7 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li sec:authorize="isAuthenticated()" class="nav-item">
+              <li sec:authorize="isAuthenticated() && hasRole('ROLE_WRITER')" class="nav-item">
                 <a class="nav-link" href="/articles/create">Crea un articolo</a>
               </li>
             <li class="nav-item">
@@ -49,7 +49,9 @@
                     </div>
                     </div>
                 </li>
-            
+                <li class="nav-item" sec:authorize="hasRole('ROLE_WRITER')">
+                    <a class="nav-link" href="/writer/dashboard">Dashboard writer</a>
+                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" id="navbarDropdown">
                     Accesso

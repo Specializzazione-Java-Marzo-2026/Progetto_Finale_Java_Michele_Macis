@@ -9,12 +9,11 @@ import org.springframework.stereotype.Service;
 
 import it.aulab.progetto_finale_michele_macis.models.User;
 import it.aulab.progetto_finale_michele_macis.repositories.UserRepository;
+import it.aulab.progetto_finale_michele_macis.models.Role;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
-
-import it.aulab.progetto_finale_michele_macis.models.Role;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -38,15 +37,16 @@ public class CustomUserDetailsService implements UserDetailsService {
         );
     }
 
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorithies(Collection<Role> roles){ {
-        Collection<? extends GrantedAuthority>mapRoles = null;
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles){
+        Collection<? extends GrantedAuthority> mapRoles = null;
         if(roles.size()!=0){
             mapRoles = roles.stream()
             .map(role -> new SimpleGrantedAuthority(role.getName()))
             .collect(Collectors.toList());
         }
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+        else{
+            mapRoles = Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+        }
+        return mapRoles;
     }
-    
-}
 }

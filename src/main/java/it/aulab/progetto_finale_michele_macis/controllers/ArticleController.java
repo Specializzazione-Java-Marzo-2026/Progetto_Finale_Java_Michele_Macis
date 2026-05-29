@@ -30,9 +30,6 @@ import it.aulab.progetto_finale_michele_macis.repositories.ArticleRepository;
 import it.aulab.progetto_finale_michele_macis.services.ArticleService;
 import it.aulab.progetto_finale_michele_macis.services.CrudService;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestBody;
-
-
 
 @Controller
 @RequestMapping("/articles")
@@ -98,6 +95,15 @@ public class ArticleController {
         return "redirect:/";
     }
 
+    // Rotta per l'eliminazione di un articolo
+    @GetMapping("/delete/{id}")
+    public String articleDelete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes){
+        articleService.delete(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Articolo cancellato con successo!");
+        return "redirect:/writer/dashboard";
+    }
+    
+
     // Rotta di dettaglio di un articolo
     @GetMapping("detail/{id}")
     public String detailArticle(@PathVariable("id") Long id, Model viewModel){
@@ -126,7 +132,7 @@ public class ArticleController {
             return "article/edit";
         }
         articleService.update(id,article,file);
-        redirectAttributes.addFlashAttribute("successMessage","Articolo modificato con successo!")
+        redirectAttributes.addFlashAttribute("successMessage","Articolo modificato con successo!");
         return "redirect:/articles";
     }
     
@@ -144,10 +150,10 @@ public class ArticleController {
     @PostMapping("/accept")
     public String articleSetAccepted(@RequestParam("action") String action, @RequestParam("id") Long id, RedirectAttributes redirectAttributes){
         if(action.equals("accept")){
-            articleService.setIsAccepted(id, true);
+            articleService.setIsAccepted(true, id);
             redirectAttributes.addFlashAttribute("resultMessage", "Articolo accettato!");
         } else if(action.equals("reject")){
-            articleService.setIsAccepted(id, false);
+            articleService.setIsAccepted(false, id );
             redirectAttributes.addFlashAttribute("resultMessage", "Articolo rifiutato!");
         } else {
             redirectAttributes.addFlashAttribute("resultMessage", "Azione non valida!");
@@ -157,19 +163,13 @@ public class ArticleController {
 
     // Rotta per la ricerca degli articoli
     @GetMapping("/search")
-    public String search(@RequestParam("searchTerm") String searchTerm, Model viewModel){
+    public String articleSearch(@Param("searchTerm") String searchTerm, Model viewModel){
         viewModel.addAttribute("title", "Risultati ricerca");
 
         List<ArticleDto> articles = articleService.search(searchTerm);
 
-        List<ArticleDto> acceptedArticles = articles.stream()
-            .filter(article -> article.getIsAccepted() != null && article.getIsAccepted())
-            .sorted(Comparator.comparing(ArticleDto::getPublishDate).reversed())
-            .toList();
-
-        viewModel.addAttribute("articles", acceptedArticles);
+        viewModel.addAttribute("articles", articles);
 
         return "article/searchResults";
     }
 }
-

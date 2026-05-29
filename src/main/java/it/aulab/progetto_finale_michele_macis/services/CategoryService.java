@@ -15,7 +15,7 @@ import it.aulab.progetto_finale_michele_macis.dtos.CategoryDto;
 import it.aulab.progetto_finale_michele_macis.models.Article;
 import it.aulab.progetto_finale_michele_macis.models.Category;
 import it.aulab.progetto_finale_michele_macis.repositories.CategoryRepository;
-import jakarta.transaction.Transactional;
+// import jakarta.transaction.Transactional;
 
 @Service
 public class CategoryService implements CrudService <CategoryDto, Category, Long>{

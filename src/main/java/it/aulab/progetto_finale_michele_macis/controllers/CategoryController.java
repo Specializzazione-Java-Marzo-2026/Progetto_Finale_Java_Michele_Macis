@@ -22,7 +22,7 @@ import it.aulab.progetto_finale_michele_macis.models.Category;
 import it.aulab.progetto_finale_michele_macis.services.ArticleService;
 import it.aulab.progetto_finale_michele_macis.services.CategoryService;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestParam;
+// import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -34,7 +34,7 @@ public class CategoryController {
     private ArticleService articleService;
 
     @Autowired
-    private Category categoryService;
+    private CategoryService categoryService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -42,15 +42,15 @@ public class CategoryController {
     // Rotta per la ricerca di articoli in base alle categorie
     @GetMapping("/search/{id}")
     public String categorySearch(@PathVariable("id") Long id, Model viewModel){
-        Category category = categoryService.read(id);
+        CategoryDto category = categoryService.read(id);
 
-        viewModel.addAttribute("title", "Tutti gli articoli trovati per categoria" + category.getName());
+        viewModel.addAttribute("title", "Tutti gli articoli trovati per categoria " + category.getName());
 
         List<ArticleDto> articles = articleService.searchByCategory(modelMapper.map(category, Category.class));
 
-        List<ArticleDto> acceptedArticles = articles.stream().filter(article-> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
+        List<ArticleDto> acceptedArticles = articles.stream().filter(article -> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
 
-        viewModel.addAttribute("articles", articles);
+        viewModel.addAttribute("articles", acceptedArticles);
 
         return "article/articles";
     }

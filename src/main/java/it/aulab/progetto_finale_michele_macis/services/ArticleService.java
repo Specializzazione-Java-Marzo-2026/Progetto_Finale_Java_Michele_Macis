@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+// import org.springframework.http.HttpStatusCode;
 import org.springframework.security.core.Authentication;
 
 import it.aulab.progetto_finale_michele_macis.dtos.ArticleDto;
@@ -21,7 +22,8 @@ import it.aulab.progetto_finale_michele_macis.models.Category;
 import it.aulab.progetto_finale_michele_macis.models.User;
 import it.aulab.progetto_finale_michele_macis.repositories.ArticleRepository;
 import it.aulab.progetto_finale_michele_macis.repositories.UserRepository;
-import it.aulab.progetto_finale_michele_macis.repositories.CategoryRepository;
+// import it.aulab.progetto_finale_michele_macis.repositories.CategoryRepository;
+// import it.aulab.progetto_finale_michele_macis.services.CustomUserDetails;
 
 @Service
 public class ArticleService implements CrudService<ArticleDto, Article, Long> {
@@ -58,13 +60,14 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
     }
 
     @Override
-    public ArticleDto create(Article article, MultipartFile multipartFile, Principal principal){
+    public ArticleDto create(Article article, MultipartFile file, Principal principal){
         String url= "";
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
             User user = ( userRepository.findById(userDetails.getId())).get();
+            article.setUser(user);
         }
 
         if(!file.isEmpty()){
@@ -85,15 +88,71 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
     }
 
     @Override
-    public ArticleDto update(Long key, Article article, MultipartFile file){
-        // TODO Auto-generated stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    public ArticleDto update(Long key, Article updatedArticle, MultipartFile file){
+        String url="";
+        // Controllo esistenza di un articolo in base all'id
+        if(articleRepository.existsById(key)){
+            // Assegno all'articolo del form lo stesso dell'originale
+            updatedArticle.setId(key);
+            // Recupero articolo orginale non modificato
+            Article article = articleRepository.findById(key).get();
+            // Imposto l'utente dell'articolo del form con lo stesso dell'originale
+            updatedArticle.setUser(article.getUser());
+            // faccio un controllo sull'esistenza del file per capire se bisogna modificare l'immagine
+            if(!file.isEmpty()){
+                try{
+                    // Eiliminare l'immagine precedente
+                    imageService.deleteImage(article.getImage().getPath());
+                    try{
+                        // Salvo nuova immagine
+                        CompletableFuture<String> futureUrl = imageService.saveImageOnCloud(file);
+                        url= futureUrl.get();
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    // Salvo il nuovo path nel db
+                    imageService.saveImageOnDB(url, updatedArticle);
+
+                    // Avendo effettuato una modifica l'articolo torna in revisione
+                    updatedArticle.setIsAccepted(null);
+                    return modelMapper.map(articleRepository.save(updatedArticle), ArticleDto.class);
+                } catch(Exception e){
+                    e.printStackTrace();
+                }
+            } else if(article.getImage()== null){ 
+                // se l'articolo originale non ha un'immagine e nemmeno quello da modificare allora non è stata fatta nessuna modifica
+                updatedArticle.setIsAccepted(article.getIsAccepted());
+            } else{
+                // se l'immagine non è stata modifica devo fare un check degli altri campi, se diversi torna in revisione, e posso anche impostare sull'articolo modificato quella originale
+                updatedArticle.setImage(article.getImage());
+                if(updatedArticle.equals(article)==false){
+                    updatedArticle.setIsAccepted(null);
+                }else{
+                    updatedArticle.setIsAccepted(article.getIsAccepted());
+                }
+                return modelMapper.map(articleRepository.save(updatedArticle), ArticleDto.class);
+            }
+        } else  {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        return null;
     }
 
     @Override
     public void delete(Long key){
-        // TODO Auto-generated stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        if(articleRepository.existsById(key)){
+            Article article = articleRepository.findById(key).get();
+            try{
+                String path = article.getImage().getPath();
+                article.getImage().setArticle(null);
+                imageService.deleteImage(path);
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+            articleRepository.deleteById(key);
+        } else{
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
 
     public List<ArticleDto> searchByCategory(Category category){
