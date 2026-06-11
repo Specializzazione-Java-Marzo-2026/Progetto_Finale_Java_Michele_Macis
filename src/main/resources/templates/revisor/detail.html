@@ -17,17 +17,17 @@
                 <div class="col-12 col-md-8 d-flex flex-column"></div>
                     <div id="carouselExample" class="carousel slide">
                         <div class="carousel-inner">
-                            <div class class="carousel-item active">
+                            <div class="carousel-item active">
                                 <img th:if="${article.image != null}" th:src="${article.image.path}" class="card-img-top" alt="...">
                                 <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}" class="card-img-top" alt="...">
                             </div>
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-targer="#carouselExample" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" arai-hidden="true"></span>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Precedente</span>
                         </button>
-                        <button class="carousel-control-next" type="button" data-bs-targer="#carouselExample" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" arai-hidden="true"></span>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Prossimo</span>
                         </button>
                     </div>
@@ -55,10 +55,10 @@
                     <a href="#" class="text-secondary pointer" onclick="goBack()">Torna indetro</a>
                 </div>
                 <div class="d-flex justify-content-between">
-                    <form th:action="@{/operations/revisor/article/accept/{id}(id=${article.id})}" method="post">
+                    <form th:action="@{/articles/accept(action='accept', articleId=${article.id})}" method="post">
                         <button type="submit" class="btn btn-primary m-2">Accetta</button>
                     </form>
-                    <form th:action="@{/operations/revisor/article/reject/{id}(id=${article.id})}" method="post">
+                    <form th:action="@{/articles/accept(action='reject', articleId=${article.id})}" method="post">
                         <button type="submit" class="btn btn-danger m-2">Rifiuta</button>
                     </form>
                 </div>

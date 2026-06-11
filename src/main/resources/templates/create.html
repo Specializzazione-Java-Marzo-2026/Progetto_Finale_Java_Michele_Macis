@@ -40,8 +40,8 @@
 
                             <div class="col">
                                 <label for="publishDate" class="form-label">Data di pubblicazione</label>
-                                <input id="publishDate" type="text" class="form-control" th:field="*{publishDate}"
-                                placeholder="yyyyMMdd">
+                                <input id="publishDate" type="date" class="form-control" th:field="*{publishDate}"
+                                placeholder="yyyy-MM-dd">
                                 <p th:errors="*{publishDate}" class="text-danger" th:if="${#fields.hasErrors('publishDate')}"></p>
                             </div>
 

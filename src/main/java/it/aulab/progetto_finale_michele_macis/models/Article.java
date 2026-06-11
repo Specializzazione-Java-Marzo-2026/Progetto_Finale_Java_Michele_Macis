@@ -13,6 +13,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import org.springframework.format.annotation.DateTimeFormat;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -44,8 +46,9 @@ public class Article {
     @Size(max = 1000)
     private String body;
 
-    @Column(nullable = false, length = 8)
-    @NotEmpty
+    @Column(nullable = false)
+    @NotNull
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate publishDate;
 
     @Column(nullable = true)
