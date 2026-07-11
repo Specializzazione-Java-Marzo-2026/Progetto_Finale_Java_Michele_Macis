@@ -1,7 +1,7 @@
 package it.aulab.progetto_finale_michele_macis.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.aulab.progetto_finale_michele_macis.models.CareerRequest;
@@ -13,6 +13,7 @@ import it.aulab.progetto_finale_michele_macis.repositories.UserRepository;
 
 import java.util.List;
 
+@Service
 public class CareerRequestServiceImpl implements CareerRequestService {
 
     @Autowired

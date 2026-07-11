@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="httè://www.thymeleaf.org">
-<head th:inser="~{index :: head}"></head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{index :: head}"></head>
 <body>
     <head th:insert="~{index :: navbar}"></head>
     <div class="vh-100">
-        <div th:if="${reultMessage}" class="alert alert-success">
+        <div th:if="${resultMessage}" class="alert alert-success">
             <p th:text="${resultMessage}"></p>
         </div>
         <div class="container">
@@ -43,7 +43,7 @@
             </div>
         </div>
     </div>
-    <head th:inser="~{index :: footer}"></head>
+    <head th:insert="~{index :: footer}"></head>
     <script th:replace="~{index :: bootstrapScript}"></script>
 </body>
 </html>

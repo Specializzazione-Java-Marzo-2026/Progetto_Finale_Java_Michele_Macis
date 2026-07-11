@@ -75,8 +75,8 @@ public class UserController {
     // Rotta per la pagina di registrazione
     @GetMapping("/register")
     public String register(Model model) {
-        model.addAttribute("userDto", new UserDto());
-        return "register";
+        model.addAttribute("user", new UserDto());
+        return "auth/register";
     }
 
     // Rotta per la pagina di login

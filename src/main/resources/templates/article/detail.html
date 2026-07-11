@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmln:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head th:insert="~{index :: head}"></head>
 <body>
     <head th:insert="~{index :: navbar}"></head>
@@ -17,17 +17,17 @@
                 <div class="col-12 col-md-8 d-flex flex-column">
                     <div id="carouselExample" class="carousel slide">
                         <div class="carousel-inner">
-                            <div class class="carousel-item active">
+                            <div class="carousel-item active">
                                 <img th:if="${article.image != null}" th:src="${article.image.path}" class="card-img-top" alt="...">
                                 <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}" class="card-img-top" alt="...">
                             </div>
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-targer="#carouselExample" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" arai-hidden="true"></span>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Precedente</span>
                         </button>
-                        <button class="carousel-control-next" type="button" data-bs-targer="#carouselExample" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" arai-hidden="true"></span>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Prossimo</span>
                         </button>
                     </div>
@@ -58,7 +58,7 @@
             </div>
         </div>
 
-<head th:inser="~{index :: footer}"></head>
+<head th:insert="~{index :: footer}"></head>
 <script th:replace="~{index :: bootstrapScript}"></script>
 <script>
     function goBack(){

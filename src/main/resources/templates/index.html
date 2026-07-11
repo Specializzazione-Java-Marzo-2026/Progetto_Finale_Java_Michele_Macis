@@ -11,85 +11,197 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZmHnM+YV8i59U5AR6csBvApHHNl/vI1Bxoy+cjL3yD9q+UeJc3r2L1Yg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <style>
+        :root {
+            --primary: #5b4bff;
+            --primary-dark: #3f33c8;
+            --accent: #ff7a59;
+            --bg: #f5f7ff;
+            --surface: #ffffff;
+            --text: #1f2335;
+            --muted: #6b7280;
+            --border: rgba(91, 75, 255, 0.15);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f7f8ff 0%, #eef4ff 100%);
+            color: var(--text);
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.92) !important;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            color: var(--primary) !important;
+        }
+
+        .nav-link {
+            color: var(--text) !important;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border: none;
+            box-shadow: 0 8px 20px rgba(91, 75, 255, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #ff693e 100%);
+        }
+
+        .btn-outline-primary {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-outline-success {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline-success:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .hero {
+            background: radial-gradient(circle at top left, rgba(255, 122, 89, 0.16), transparent 35%), linear-gradient(135deg, #ffffff 0%, #f3f6ff 100%);
+            border: 1px solid var(--border);
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 45px rgba(31, 35, 53, 0.08);
+        }
+
+        .section-title {
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .card {
+            border: 0;
+            border-radius: 1rem;
+            box-shadow: 0 12px 30px rgba(31, 35, 53, 0.08);
+            overflow: hidden;
+        }
+
+        .card-img-top {
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .badge-soft {
+            background: rgba(91, 75, 255, 0.12);
+            color: var(--primary-dark);
+            padding: 0.45rem 0.75rem;
+            border-radius: 999px;
+            font-weight: 600;
+        }
+
+        footer {
+            background: linear-gradient(135deg, #f3f6ff 0%, #e8eefc 100%) !important;
+            color: #1f2335 !important;
+            border-top: 1px solid rgba(31, 35, 53, 0.12);
+        }
+
+        footer .btn-primary {
+            color: #ffffff;
+            font-weight: 600;
+        }
+    </style>
+
     <title th:text="${title}">Title</title>
 </head>
 <!-- fine fragment head -->
 
 <body>
     <!-- inizio navbar -->
-    <nav th:fragment="navbar" class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="@{/}">Aulab Chronicle</a>
+    <nav th:fragment="navbar" class="navbar navbar-expand-lg sticky-top shadow-sm">
+        <div class="container">
+          <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/}">
+            <i class="fa-solid fa-book-open-reader"></i>
+            <span>Aulab Chronicle</span>
+          </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li sec:authorize="isAuthenticated() && hasRole('ROLE_WRITER')" class="nav-item">
-                <a class="nav-link" href="/articles/create">Crea un articolo</a>
+                <a class="nav-link" th:href="@{/articles/create}">Crea un articolo</a>
               </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/articles">Tutti gli articoli</a>
-            </li>
-                <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
-                    <div class="d-flex">
-                        <a class="nav-link" href="/admin/dashboard">Dashboard admin</a>
-                        <div class="mt-1" th:if="${careerRequests > 0}">
-                            <i class="fas fa-bell fa-1 pt-2"></i>
-                            <span class="badge rounded-pill bg-danger text-white px-1" th:text="${careerRequests}"></span>
-                        </div>
-                    </div>
-                </li>
-                <li class="nav-item" sec:authorize="hasRole('ROLE_REVISOR')">
-                    <div class="d-flex">
-                    <a class="nav-link" href="/revisor/dashboard">Dashboard revisore</a>
-                    <div class="mt-1" th:if="${articlesToBeRevised > 0}">
-                        <i class="fas fa-bell fa-1 pt-2"></i>
-                        <span class="badge rounded-pill bg-danger text-white px-1" th:text="${articlesToBeRevised}"></span>
-                    </div>
-                    </div>
-                </li>
-                <li class="nav-item" sec:authorize="hasRole('ROLE_WRITER')">
-                    <a class="nav-link" href="/writer/dashboard">Dashboard writer</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" id="navbarDropdown">
-                    Accesso
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li sec:authorize="isAnonymous()"><a class="dropdown-item" aria-current="page" th:href="@{/register}">Register</a></li>
-                        <li sec:authorize="isAnonymous()"><a class="dropdown-item" aria-current="page" th:href="@{/login}">Login</a></li>
-                        <li sec:authorize="isAuthenticated()"><a class="dropdown-item" aria-current="page" th:href="@{/logout}">Logout</a></li>
-                    </ul>
-                </li>
+              <li class="nav-item">
+                <a class="nav-link" th:href="@{/articles}">Tutti gli articoli</a>
+              </li>
+              <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                <div class="d-flex align-items-center">
+                  <a class="nav-link" th:href="@{/admin/dashboard}">Dashboard admin</a>
+                  <div class="mt-1" th:if="${careerRequests > 0}">
+                    <i class="fas fa-bell fa-1"></i>
+                    <span class="badge rounded-pill bg-danger text-white px-1" th:text="${careerRequests}"></span>
+                  </div>
+                </div>
+              </li>
+              <li class="nav-item" sec:authorize="hasRole('ROLE_REVISOR')">
+                <div class="d-flex align-items-center">
+                  <a class="nav-link" th:href="@{/revisor/dashboard}">Dashboard revisore</a>
+                  <div class="mt-1" th:if="${articlesToBeRevised > 0}">
+                    <i class="fas fa-bell fa-1"></i>
+                    <span class="badge rounded-pill bg-danger text-white px-1" th:text="${articlesToBeRevised}"></span>
+                  </div>
+                </div>
+              </li>
+              <li class="nav-item" sec:authorize="hasRole('ROLE_WRITER')">
+                <a class="nav-link" th:href="@{/writer/dashboard}">Dashboard writer</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" id="navbarDropdown">
+                  Accesso
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li sec:authorize="isAnonymous()"><a class="dropdown-item" th:href="@{/register}">Register</a></li>
+                  <li sec:authorize="isAnonymous()"><a class="dropdown-item" th:href="@{/login}">Login</a></li>
+                  <li sec:authorize="isAuthenticated()"><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+                </ul>
+              </li>
             </ul>
-            <div sec:authorize="isAuthenticated()" th:text="'Benvenuto, ' + ${#authentication.principal.fullName()} + '-' + ${#authentication.principal.authorities[0].authority.replace('ROLE_', '')} + '!' ">
-            >Benvenuto</div>
+            <div sec:authorize="isAuthenticated()" class="me-3 text-muted fw-semibold" th:text="'Benvenuto, ' + ${#authentication.principal.fullName()} + ' · ' + ${#authentication.principal.authorities[0].authority.replace('ROLE_', '')} + '!'">
+            </div>
+            <form class="d-flex" th:action="@{/search}" method="get">
+              <input class="form-control me-2" type="search" placeholder="Cerca" name="keyword" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Cerca</button>
+            </form>
+          </div>
         </div>
-        <form class="d-flex" th:action="@{/search}" method="get">
-            <input class="form-control me-2" type="search" placeholder="Cerca" name="keyword" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Cerca</button>
-        </form>
     </nav>
     <!-- fine navbar -->
 
     <!-- footer -->
-    <footer th:fragment="footer" class="bg-dark text-white pt-4">
+    <footer th:fragment="footer" class="text-white pt-4 pb-3 mt-5">
         <div class="container">
-            <div class="row justify-content-between">
-                <!-- info -->
-                <div class="col-md-4 mb-3">
-                    <a href="/"><h5>Aulab IT</h5></a>"
+            <div class="row g-4 align-items-center">
+                <div class="col-md-6">
+                    <h5 class="fw-bold mb-2">Aulab Chronicle</h5>
+                    <p class="text-light mb-0">Un luogo elegante per leggere, scrivere e scoprire contenuti di qualità.</p>
                 </div>
-                <!-- info contatti -->
-                <div class="col-md-4 mb-3">
-                    <h5>Lavora con noi</h5>
-                        <a href="@{/operations/career/request}" class="btn btn-primary">Richiedi</a>
+                <div class="col-md-6 text-md-end">
+                    <h6 class="fw-semibold mb-3">Lavora con noi</h6>
+                    <a th:href="@{/operations/career/request}" class="btn btn-primary">Richiedi</a>
                 </div>
             </div>
         </div>
-        <div class="bg-secondary text-center py-2">
-            <p class="mb-0"> 2024 Aulab Jost. All rights reserved.</p>
+        <div class="text-center py-3 mt-4 border-top border-light border-opacity-25">
+            <p class="mb-0 text-light">© 2026 Aulab Chronicle. Tutti i diritti riservati.</p>
         </div>
     </footer>
     <!-- fine footer -->
