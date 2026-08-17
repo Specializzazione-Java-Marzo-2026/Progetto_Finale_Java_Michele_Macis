@@ -70,7 +70,7 @@ public class ArticleController {
         viewModel.addAttribute("title", "Crea un articolo");
         viewModel.addAttribute("article", new Article());
         viewModel.addAttribute("categories", categoryService.readAll());
-        return "articles/create";
+        return "create";
     }
 
     // Rotta per lo store di un articolo
@@ -86,7 +86,7 @@ public class ArticleController {
             viewModel.addAttribute("title","Crea un articolo");
             viewModel.addAttribute("article", article);
             viewModel.addAttribute("categories", categoryService.readAll());
-            return "article/create";
+            return "create";
         }
 
         articleService.create(article, file, principal);
@@ -139,11 +139,11 @@ public class ArticleController {
     
 
     // Rotta dettaglio di un articolo per il revisore
-    @GetMapping("revisor/detail/{id}")
+    @GetMapping("/revisor/detail/{id}")
     public String revisorDetailArticle(@PathVariable("id") Long id, Model viewModel){
         viewModel.addAttribute("title","Article detail");
         viewModel.addAttribute("article", articleService.read(id));
-        return "revisor/articleDetail";
+        return "revisor/detail";
     }
 
     // Rotta di revisione articoli

@@ -175,9 +175,9 @@
                 </ul>
               </li>
             </ul>
-            <div sec:authorize="isAuthenticated()" class="me-3 text-muted fw-semibold" th:text="'Benvenuto, ' + ${#authentication.principal.fullName()} + ' · ' + ${#authentication.principal.authorities[0].authority.replace('ROLE_', '')} + '!'">
+            <div sec:authorize="isAuthenticated()" class="me-3 text-muted fw-semibold" th:text="'Benvenuto, ' + ${#authentication.name} + ' · ' + ${#authentication.principal.authorities[0].authority.replace('ROLE_', '')} + '!'">
             </div>
-            <form class="d-flex" th:action="@{/search}" method="get">
+            <form class="d-flex" th:action="@{/articles/search}" method="get">
               <input class="form-control me-2" type="search" placeholder="Cerca" name="keyword" aria-label="Search">
               <button class="btn btn-outline-success" type="submit">Cerca</button>
             </form>

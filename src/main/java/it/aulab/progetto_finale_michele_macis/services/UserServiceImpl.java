@@ -45,15 +45,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUser(UserDto userDto, RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response) {   
+    public void saveUser(UserDto userDto, RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response) {
         User user = new User();
         user.setUsername(userDto.getFirstName() + " " + userDto.getLastName());
         user.setEmail(userDto.getEmail());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
         Role userRole = roleRepository.findByName("ROLE_USER");
-        user.setRoles(List.of(userRole));
+        if (userRole == null) {
+            userRole = new Role();
+            userRole.setName("ROLE_USER");
+            userRole = roleRepository.save(userRole);
+        }
 
+        user.setRoles(List.of(userRole));
         userRepository.save(user);
     }
 

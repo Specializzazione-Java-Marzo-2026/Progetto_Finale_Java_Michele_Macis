@@ -26,9 +26,9 @@
                     </thead>
                     <tbody>
                         <tr th:each="request:${requests}">
-                            <td th:each="${request.id}"></td>
-                            <td th:each="${request.user.username}"></td>
-                            <td th:each="${request.role.name}"></td>
+                            <td th:text="${request.id}"></td>
+                            <td th:text="${request.user.username}"></td>
+                            <td th:text="${request.role.name}"></td>
                             <td>
                                 <a th:href="@{/operations/career/request/detail/{id}(id=${request.id})}" class="btn btn-primary m-2">
                                     <i class="fa-solid fa-bars"></i>

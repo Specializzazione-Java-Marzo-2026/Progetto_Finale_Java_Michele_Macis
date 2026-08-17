@@ -38,15 +38,13 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles){
-        Collection<? extends GrantedAuthority> mapRoles = null;
-        if(roles.size()!=0){
-            mapRoles = roles.stream()
-            .map(role -> new SimpleGrantedAuthority(role.getName()))
-            .collect(Collectors.toList());
+        if (roles == null || roles.isEmpty()) {
+            return java.util.List.of(new SimpleGrantedAuthority("ROLE_USER"));
         }
-        else{
-            mapRoles = Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
-        }
-        return mapRoles;
+
+        return roles.stream()
+                .filter(role -> role != null && role.getName() != null)
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
     }
 }

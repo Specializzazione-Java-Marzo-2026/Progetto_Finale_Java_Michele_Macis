@@ -15,7 +15,7 @@
                 </div>
 
                 <div class="col-12 my-5">
-                    <form th:action="@{/articles}" method="POST" th:objects="${article}" enctype="multipart/form-data">
+                    <form th:action="@{/articles}" method="POST" th:object="${article}" enctype="multipart/form-data">
                         <div class="row mb-3">
                             <div class="col">
                                 <label for="articleTitle" class="form-label">Titolo</label>
@@ -47,11 +47,12 @@
 
                             <div class="col">
                                 <label for="category" class="form-label">Categoria</label>
-                                <select id="category" th:field="*{category}" class="form-select">
+                                <select id="category" th:field="*{category.id}" class="form-select">
+                                    <option value="">Seleziona una categoria</option>
                                     <option th:each="category:${categories}" th:value="${category.id}"
                                     th:text="${category.name}"></option>
-                                    <p th:errors="*{category}" class="text-danger" th:if="${#fields.hasErrors('category')}"></p>
                                 </select>
+                                <p th:errors="*{category}" class="text-danger" th:if="${#fields.hasErrors('category')}"></p>
                             </div>
 
                             <div class="mb-3">

@@ -120,7 +120,7 @@ public class UserController {
         }
 
         // Rotta dashboard dell'admin
-        @GetMapping("/admin/admindashboard")
+        @GetMapping("/admin/dashboard")
         public String adminDashboard(Model viewModel){
             viewModel.addAttribute("title", "Richieste ricevute");
             viewModel.addAttribute("requests", careerRequestRepository.findByIsCheckedFalse());

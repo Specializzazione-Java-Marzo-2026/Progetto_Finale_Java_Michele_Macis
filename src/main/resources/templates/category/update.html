@@ -17,7 +17,7 @@
                             <div class="col">
                                 <label for="name" class="form-label">Nome categoria</label>
                                 <input id="name" type="text" class="form-control" th:field="*{name}" placeholder="Inserisci il nome...">
-                                <p th:erros="*{name}" class="text-danger" th:if="${#fields.hasErrors('name')}"></p>
+                                <p th:errors="*{name}" class="text-danger" th:if="${#fields.hasErrors('name')}"></p>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-success">Aggiorna categoria</button>

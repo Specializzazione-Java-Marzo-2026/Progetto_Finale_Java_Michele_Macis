@@ -50,7 +50,7 @@ public class OperationController {
     }
 
     // Rotta salvataggio di un richiesta di ruolo
-    @PostMapping("/csreer/request/save")
+    @PostMapping("/career/request/save")
     public String careerRequestStore(@ModelAttribute("careerRequest") CareerRequest careerRequest, Principal principal, RedirectAttributes redirectAttributes) {
         User user = userRepository.findByEmail(principal.getName());
 

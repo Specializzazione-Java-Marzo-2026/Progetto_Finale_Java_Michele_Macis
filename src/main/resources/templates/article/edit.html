@@ -33,16 +33,16 @@
                                 <p th:errors="*{body}" class="text-danger" th:if="${#fields.hasErrors('body')}"></p>
                             </div>
                             <div class="col">
-                                <label for="date" class="form-label">Data di pubblicazione(8 chars)</label>
-                                <input id="date" type="text" class="form-control" th:field="*{date}" placeholder="yyyyMMdd">
-                                <p th:errors="*{date}" class="text-danger" th:if="${#fields.hasErrors('date')}"></p>
+                                <label for="publishDate" class="form-label">Data di pubblicazione(8 chars)</label>
+                                <input id="publishDate" type="date" class="form-control" th:field="*{publishDate}" placeholder="yyyy-MM-dd">
                             </div>
                             <div class="mb-3">
                                 <label for="category" class="form-label">Categoria</label>
-                                <select id="category" th:field="*{category}" class="form-select">
-                                    <option th:each="category:${categories}" th:value="${category.id}"></option>
-                                    <p th:errors="*{category}" class="text-danger" th:if="${#fields.hasErrors('category')}"></p>
+                                <select id="category" th:field="*{category.id}" class="form-select">
+                                    <option value="">Seleziona una categoria</option>
+                                    <option th:each="category:${categories}" th:value="${category.id}" th:text="${category.name}"></option>
                                 </select>
+                                <p th:errors="*{category}" class="text-danger" th:if="${#fields.hasErrors('category')}"></p>
                             </div>
                             <div class="mb-3 d-flex flex-column" th:if="${article.image != null}">
                                 <label for="image" class="form-label">Immagine dell'articolo</label>
