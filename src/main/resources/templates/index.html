@@ -137,13 +137,13 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li sec:authorize="isAuthenticated() && hasRole('ROLE_WRITER')" class="nav-item">
+              <li sec:authorize="isAuthenticated() && hasRole('WRITER')" class="nav-item">
                 <a class="nav-link" th:href="@{/articles/create}">Crea un articolo</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" th:href="@{/articles}">Tutti gli articoli</a>
               </li>
-              <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+              <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                 <div class="d-flex align-items-center">
                   <a class="nav-link" th:href="@{/admin/dashboard}">Dashboard admin</a>
                   <div class="mt-1" th:if="${careerRequests > 0}">
@@ -152,7 +152,7 @@
                   </div>
                 </div>
               </li>
-              <li class="nav-item" sec:authorize="hasRole('ROLE_REVISOR')">
+              <li class="nav-item" sec:authorize="hasRole('REVISOR')">
                 <div class="d-flex align-items-center">
                   <a class="nav-link" th:href="@{/revisor/dashboard}">Dashboard revisore</a>
                   <div class="mt-1" th:if="${articlesToBeRevised > 0}">
@@ -161,7 +161,7 @@
                   </div>
                 </div>
               </li>
-              <li class="nav-item" sec:authorize="hasRole('ROLE_WRITER')">
+              <li class="nav-item" sec:authorize="hasRole('WRITER')">
                 <a class="nav-link" th:href="@{/writer/dashboard}">Dashboard writer</a>
               </li>
               <li class="nav-item dropdown">

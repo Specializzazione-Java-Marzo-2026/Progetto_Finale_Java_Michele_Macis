@@ -81,7 +81,12 @@ public class OperationController {
         redirectAttributes.addFlashAttribute("successMessage", "Ruolo abilitato per l'utente");
         return "redirect:/admin/dashboard";
     }
-    
-    
+
+    @PostMapping("/career/request/reject/{requestId}")
+    public String careerRequestReject(@PathVariable Long requestId, RedirectAttributes redirectAttributes) {
+        careerRequestService.careerReject(requestId);
+        redirectAttributes.addFlashAttribute("successMessage", "Richiesta rifiutata");
+        return "redirect:/admin/dashboard";
+    }
     
 }

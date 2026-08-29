@@ -29,10 +29,16 @@
                             <td th:text="${request.id}"></td>
                             <td th:text="${request.user.username}"></td>
                             <td th:text="${request.role.name}"></td>
-                            <td>
-                                <a th:href="@{/operations/career/request/detail/{id}(id=${request.id})}" class="btn btn-primary m-2">
+                            <td class="d-flex gap-2 flex-wrap">
+                                <a th:href="@{/operations/career/request/detail/{id}(id=${request.id})}" class="btn btn-primary">
                                     <i class="fa-solid fa-bars"></i>
                                 </a>
+                                <form th:action="@{/operations/career/request/accept/{id}(id=${request.id})}" method="post">
+                                    <button type="submit" class="btn btn-success">Accetta</button>
+                                </form>
+                                <form th:action="@{/operations/career/request/reject/{id}(id=${request.id})}" method="post">
+                                    <button type="submit" class="btn btn-danger">Rifiuta</button>
+                                </form>
                             </td>
                         </tr>
                     </tbody>

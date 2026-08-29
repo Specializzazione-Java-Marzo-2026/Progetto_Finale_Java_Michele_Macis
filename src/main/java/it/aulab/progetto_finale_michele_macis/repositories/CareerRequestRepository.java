@@ -11,9 +11,9 @@ import it.aulab.progetto_finale_michele_macis.models.CareerRequest;
 public interface CareerRequestRepository extends CrudRepository<CareerRequest, Long>{
     List<CareerRequest> findByIsCheckedFalse();
 
-    @Query(value ="SELECT user_id FROM users_roles", nativeQuery = true)
+    @Query(value ="SELECT DISTINCT user_id FROM users_roles", nativeQuery = true)
     List<Long> findAllUserIds();
 
-    @Query(value ="SELECT role_id FROM users_roles WHERE user_id = _id", nativeQuery = true)
+    @Query(value ="SELECT role_id FROM users_roles WHERE user_id = :id", nativeQuery = true)
     List<Long> findUserById(@Param("id")Long id);
 }
