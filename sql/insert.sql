@@ -5,6 +5,13 @@ insert into roles (name) values ('ROLE_REVISOR');
 insert into roles (name) values ('ROLE_WRITER');
 insert into roles (name) values ('ROLE_USER');
 
+insert into categories (name) values ('Tecnologia');
+insert into categories (name) values ('Sport');
+insert into categories (name) values ('Cultura');
+insert into categories (name) values ('Salute');
+insert into categories (name) values ('Viaggi');
+insert into categories (name) values ('Lifestyle');
+
 CREATE TABLE IF NOT EXISTS users_roles (
   user_id BIGINT NOT NULL,
   role_id BIGINT NOT NULL,

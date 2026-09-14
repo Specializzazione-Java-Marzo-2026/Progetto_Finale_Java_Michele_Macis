@@ -12,6 +12,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import it.aulab.progetto_finale_michele_macis.models.Article;
 import it.aulab.progetto_finale_michele_macis.models.Image;
@@ -23,6 +25,8 @@ import org.springframework.http.*;
 
 @Service
 public class ImageServiceImpl implements ImageService{
+
+    private static final Logger logger = LoggerFactory.getLogger(ImageServiceImpl.class);
 
     @Autowired
     private ImageRepository imageRepository;
@@ -42,8 +46,16 @@ public class ImageServiceImpl implements ImageService{
     private final RestTemplate restTemplate = new RestTemplate();
 
     public void saveImageOnDB(String url, Article article){
-        url = url.replace(supabaseBucket, supabaseImage);
-        imageRepository.save(Image.builder().path(url).article(article).build());
+        logger.info("saveImageOnDB - URL ricevuto: {}", url);
+        logger.info("saveImageOnDB - supabaseBucket: {}", supabaseBucket);
+        logger.info("saveImageOnDB - supabaseImage: {}", supabaseImage);
+        
+        String processedUrl = url.replace(supabaseBucket, supabaseImage);
+        logger.info("saveImageOnDB - URL processato: {}", processedUrl);
+        
+        Image image = Image.builder().path(processedUrl).article(article).build();
+        imageRepository.save(image);
+        logger.info("saveImageOnDB - Immagine salvata nel DB con path: {}", processedUrl);
     }
 
     @Async
@@ -51,10 +63,12 @@ public class ImageServiceImpl implements ImageService{
         if(!file.isEmpty()){
             try{
                 String nameFile = UUID.randomUUID().toString()+ "_" + file.getOriginalFilename();
+                logger.info("saveImageOnCloud - Nome file: {}", nameFile);
                 
                 String exstension = StringManipulation.getFileExstension(nameFile);
 
                 String url = supabaseUrl+supabaseBucket+nameFile;
+                logger.info("saveImageOnCloud - URL di upload: {}", url);
 
                 MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
 
@@ -62,15 +76,18 @@ public class ImageServiceImpl implements ImageService{
 
                 HttpHeaders headers = new HttpHeaders();
                 headers.set("Content-Type","image/"+exstension);
-                headers.set("Authorization","Bearer"+supabaseKey);
+                headers.set("Authorization","Bearer "+supabaseKey);
 
                 HttpEntity<byte[]> requestEntity = new HttpEntity<>(file.getBytes(), headers);
 
                 restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+                
+                logger.info("saveImageOnCloud - Immagine caricata su Supabase: {}", url);
 
                 return CompletableFuture.completedFuture(url);
 
             } catch (Exception e) {
+                logger.error("saveImageOnCloud - Errore durante il caricamento: ", e);
                 e.printStackTrace();
             }
         } else {

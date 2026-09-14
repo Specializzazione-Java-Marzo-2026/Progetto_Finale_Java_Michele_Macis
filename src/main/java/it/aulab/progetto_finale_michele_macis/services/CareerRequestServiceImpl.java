@@ -46,7 +46,7 @@ public class CareerRequestServiceImpl implements CareerRequestService {
         careerRequest.setIsChecked(false);
         careerRequestRepository.save(careerRequest);
         // Invio mail di richiesta x il ruolo di admin
-        emailService.sendSimpleEmail("mail che non ricordo", "Richiesta per ruolo:" + careerRequest.getRole().getName(), "C'è una nuova richiesta di collaborazione da parte di " + user.getUsername());
+        emailService.sendSimpleEmail("admin@example.com", "Richiesta per ruolo: " + careerRequest.getRole().getName(), "C'è una nuova richiesta di collaborazione da parte di " + user.getUsername());
     }
 
     @Override

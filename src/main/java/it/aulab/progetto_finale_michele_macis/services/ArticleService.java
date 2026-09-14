@@ -15,24 +15,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 // import org.springframework.http.HttpStatusCode;
 import org.springframework.security.core.Authentication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import it.aulab.progetto_finale_michele_macis.dtos.ArticleDto;
 import it.aulab.progetto_finale_michele_macis.models.Article;
 import it.aulab.progetto_finale_michele_macis.models.Category;
 import it.aulab.progetto_finale_michele_macis.models.User;
 import it.aulab.progetto_finale_michele_macis.repositories.ArticleRepository;
+import it.aulab.progetto_finale_michele_macis.repositories.CategoryRepository;
 import it.aulab.progetto_finale_michele_macis.repositories.UserRepository;
-// import it.aulab.progetto_finale_michele_macis.repositories.CategoryRepository;
 // import it.aulab.progetto_finale_michele_macis.services.CustomUserDetails;
 
 @Service
 public class ArticleService implements CrudService<ArticleDto, Article, Long> {
+
+    private static final Logger logger = LoggerFactory.getLogger(ArticleService.class);
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private ArticleRepository articleRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Autowired
     private ImageService imageService;
@@ -70,18 +77,41 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
             article.setUser(user);
         }
 
+        // Ricaricare la categoria dal DB per evitare TransientPropertyValueException
+        if (article.getCategory() != null && article.getCategory().getId() != null) {
+            logger.info("Categoria ricevuta con ID: {}", article.getCategory().getId());
+            Optional<Category> categoryOptional = categoryRepository.findById(article.getCategory().getId());
+            if (categoryOptional.isPresent()) {
+                article.setCategory(categoryOptional.get());
+                logger.info("Categoria caricata dal DB: {}", categoryOptional.get().getName());
+            } else {
+                logger.warn("Categoria non trovata nel DB con ID: {}", article.getCategory().getId());
+                article.setCategory(null);
+            }
+        } else {
+            logger.warn("Categoria null o senza ID");
+        }
+
+        // Caricare e salvare l'immagine PRIMA di salvare l'articolo
         if(!file.isEmpty()){
             try{
                 CompletableFuture<String> futureUrl = imageService.saveImageOnCloud(file);
-                url = futureUrl.get();
+                url = futureUrl.get(); // Attendi il completamento
+                logger.info("Immagine caricata su cloud: {}", url);
             }catch (Exception e){
+                logger.error("Errore nel caricamento immagine: ", e);
                 e.printStackTrace();
             }
         }
+        
         article.setIsAccepted(null);
     
+        // Salva articolo
         ArticleDto dto = modelMapper.map(articleRepository.save(article),ArticleDto.class);
-        if(!file.isEmpty()){
+        
+        // Salva immagine nel DB DOPO aver salvato l'articolo
+        if(!file.isEmpty() && !url.isEmpty()){
+            logger.info("Salvataggio immagine nel DB con URL: {}", url);
             imageService.saveImageOnDB(url, article);
         }
         return dto;

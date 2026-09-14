@@ -90,7 +90,7 @@ public class ArticleController {
         }
 
         articleService.create(article, file, principal);
-        redirectAttributes.addFlashAttribute("succesMessage","Articolo aggiunto con successo!");
+        redirectAttributes.addFlashAttribute("succesMessage","Richiesta di approvazione articolo inviata con successo!");
 
         return "redirect:/";
     }
